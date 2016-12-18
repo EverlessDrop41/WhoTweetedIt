@@ -50,14 +50,15 @@ console.log(userA + " : " + userB);
 
         if (tweet && tweet.text) {
           response.json({
-            error: "tweet not found"
+            user: username,
+            tweet: tweet.text
           });
         }
 
         response.json({
-          user: username,
-          tweet: tweet.text
+          error: "tweet not found"
         });
+
       })
     });
     request.on('error', function(e) {
