@@ -13,6 +13,7 @@ module.exports = {
     return new Buffer(this.GET_KEY_AND_SECRET()).toString('base64')
   },
   GET_ACCESS_TOKEN: function(callback, errorCallback) {
+    var that = this;
     if (this.access_token == "") {
       var request = https.request({
         host: "api.twitter.com",
@@ -25,9 +26,10 @@ module.exports = {
       }, function(res) {
         res.setEncoding('utf8');
         res.on('data', function(data) {
+          console.log("BIIIGGGGG:" + data);
+          console.log("AAA" + that.GET_KEY_AND_SECRET())
           var jsonObject = JSON.parse(data);
           this.access_token = jsonObject['access_token'];
-          console.log(typeof callback)
           callback(this.access_token);
         });
       });

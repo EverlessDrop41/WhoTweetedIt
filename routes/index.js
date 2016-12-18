@@ -45,7 +45,7 @@ console.log(userA + " : " + userB);
       });
       res.on('end', () => {
         json_body = JSON.parse(body)
-        var index = getRandomInt(0, json_body.length - 1)
+        var index = getRandomInt(0, json_body.length - 2)
         var tweet = json_body[index];
 
         if (tweet && tweet.text) {
@@ -53,12 +53,12 @@ console.log(userA + " : " + userB);
             user: username,
             tweet: tweet.text
           });
+        } else {
+          console.log(json_body, access_token);
+          response.json({
+            error: "tweet not found"
+          });
         }
-
-        response.json({
-          error: "tweet not found"
-        });
-
       })
     });
     request.on('error', function(e) {
@@ -72,7 +72,7 @@ console.log(userA + " : " + userB);
 
 router.get('/access_token', function (req, res) {
   utils.GET_ACCESS_TOKEN(function(data) {
-    res.send(data)
+    res.send("ACCESS TOKEN: " + data)
   }, function (e) {
     res.send("There was an error: \n\n" + e.Message);
   });
