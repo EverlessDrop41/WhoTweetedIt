@@ -31,7 +31,7 @@ var app = new Vue({
       self.loading = true;
       $.ajax(
         {
-          url: "http://127.0.0.1:3000/api/random_twitter?userA=" + self.username1 + "&userB=" + self.username2
+          url: "/api/random_twitter?userA=" + self.username1 + "&userB=" + self.username2
         }
       ).done(function(data) {
         // Update currentTweet object
