@@ -7,16 +7,15 @@
 }
 
 .incorrect {
-  color: #FFFFFF;
   background: #D8414A;
 }
 
 .correct {
-  color: #FFFFFF;
   background: #4AD841;
 }
 
-.correct:hover, .incorrect:hover, 
+.correct, .incorrect,
+.correct:hover, .incorrect:hover,
 .correct:active, .incorrect:active,
 .correct:focus, .incorrect:focus {
   color: #FFF;
@@ -37,7 +36,7 @@
 
 #the_tweet {
   font-size: 2em !important;
-  height: 3em;
+  height: 4em;
 }
 
 #nextTweetButton {
@@ -49,4 +48,8 @@
 #tryDifferentUsersButton {
   color: #aaa;
   border-width: 0px !important;
+}
+
+.score {
+  text-align: center;
 }
