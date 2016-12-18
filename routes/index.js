@@ -18,7 +18,7 @@ router.get('/random_twitter', function(req, response) {
   var userA = req.query.userA;
   var userB = req.query.userB;
 
-console.log(userA + " : " + userB);
+  console.log(userA + " : " + userB);
 
 
   if (!userA || !userB) {
@@ -31,7 +31,7 @@ console.log(userA + " : " + userB);
   utils.GET_ACCESS_TOKEN(function (access_token) {
     var request = https.request({
       host: "api.twitter.com",
-      path: "/1.1/statuses/user_timeline.json?screen_name=" + username + "&count=50",
+      path: "/1.1/users/lookup.json?screen_name=" + userA + "," + userB,
       headers: {
         "Authorization": "Bearer " + access_token,
         "Content-Type": "application/x-www-form-urlencoded"
@@ -45,26 +45,54 @@ console.log(userA + " : " + userB);
       });
       res.on('end', () => {
         json_body = JSON.parse(body)
-        var index = getRandomInt(0, json_body.length - 2)
-        var tweet = json_body[index];
-
-        if (tweet && tweet.text) {
-          response.json({
-            user: username,
-            tweet: tweet.text
-          });
+        if (json_body.length !== 2) {
+          response.json({error: "invalid names"})
         } else {
-          console.log(json_body, access_token);
-          response.json({
-            error: "tweet not found"
+        var request = https.request({
+          host: "api.twitter.com",
+          path: "/1.1/statuses/user_timeline.json?screen_name=" + username + "&count=50",
+          headers: {
+            "Authorization": "Bearer " + access_token,
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          method: "GET",
+        }, function(res) {
+          res.setEncoding('utf8');
+          var body = "";
+          res.on('data', function(data) {
+            body += data;
           });
-        }
+          res.on('end', () => {
+            json_body = JSON.parse(body)
+            var index = getRandomInt(0, json_body.length - 2)
+            var tweet = json_body[index];
+
+            if (tweet && tweet.text) {
+              response.json({
+                user: username,
+                tweet: tweet.text
+              });
+            } else {
+              console.log(json_body, access_token);
+              response.json({
+                error: "tweet not found"
+              });
+            }
+          })
+        });
+        request.on('error', function(e) {
+          response.error(e);
+        });
+        request.end();
+      }
       })
     });
     request.on('error', function(e) {
       response.error(e);
     });
     request.end();
+    
+    
   }, function (error) {
     response.send(error);
   });
