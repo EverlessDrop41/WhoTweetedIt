@@ -34,9 +34,15 @@
   text-align: center;
 }
 
+#main {
+  width: 100%;
+}
+
 #the_tweet {
+  display: block;
   font-size: 2em !important;
-  height: 4em;
+
+  /*min-height: 4em;*/
 }
 
 #nextTweetButton {
@@ -50,6 +56,33 @@
   border-width: 0px !important;
 }
 
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-width: 90%;
+}
+
 .score {
   text-align: center;
+}
+
+.loader {
+  /*display: block;*/
+    border-right: 2vw solid #0099ff;
+    border-top: 2vw solid #999;
+    border-left: 2vw solid #0099ff;
+    border-bottom: 2vw solid #999;
+    margin-left: 33.5vw;
+    border-radius: 100%;
+    width: 20vw;
+    height: 20vw;
+    animation: spin 1s linear infinite;
+    margin-bottom: 2em;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
