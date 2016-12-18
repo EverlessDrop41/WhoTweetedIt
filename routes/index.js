@@ -47,6 +47,13 @@ console.log(userA + " : " + userB);
         json_body = JSON.parse(body)
         var index = getRandomInt(0, json_body.length - 1)
         var tweet = json_body[index];
+
+        if (tweet && tweet.text) {
+          response.json({
+            error: "tweet not found"
+          });
+        }
+
         response.json({
           user: username,
           tweet: tweet.text
