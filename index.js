@@ -1,10 +1,6 @@
 var express = require('express')
 var app = express()
 
-app.get('/', function (req, res) {
-  res.send('Hello World!')
-})
-
 var index_route = require("./routes/index");
 app.use('/', index_route);
 
