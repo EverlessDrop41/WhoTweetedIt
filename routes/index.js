@@ -65,7 +65,7 @@ console.log(userA + " : " + userB);
     });
     request.end();
   }, function (error) {
-    response.error(error);
+    response.send(error);
   });
 });
 
@@ -73,7 +73,7 @@ router.get('/access_token', function (req, res) {
   utils.GET_ACCESS_TOKEN(function(data) {
     res.send(data)
   }, function (e) {
-    res.error("There was an error: \n\n" + e.Message);
+    res.send("There was an error: \n\n" + e.Message);
   });
 })
 
