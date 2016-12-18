@@ -16,7 +16,9 @@ function getRandomInt(min, max) {
 
 router.get('/random_twitter', function(req, response) {
   var userA = req.query.userA;
+  userA = userA.trim();
   var userB = req.query.userB;
+  userB = userB.trim();
 
   console.log(userA + " : " + userB);
 
@@ -91,8 +93,8 @@ router.get('/random_twitter', function(req, response) {
       response.error(e);
     });
     request.end();
-    
-    
+
+
   }, function (error) {
     response.send(error);
   });
