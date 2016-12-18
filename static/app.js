@@ -68,7 +68,8 @@ var app = new Vue({
     currentTweetAnswered: false,
     score: 0,
     loading: false,
-    errorText: ''
+    errorText: '',
+    unsuccsful_runs: 0
   },
   methods: {
     usernameFormButton: function() {
@@ -78,6 +79,7 @@ var app = new Vue({
       else if (this.username1 != this.username2) {
         this.showTweetDisplay = true;
         this.showUsernameForm = false;
+        this.errorText = null;
         this.displayNextTweet();
       } else {
         this.errorText = "Usernames cannot be the same."
@@ -93,6 +95,7 @@ var app = new Vue({
     },
     displayNextTweet: function() {
       var self = this;
+      self.currentTweetText = "";
       // Make AJAX request
       self.loading = true;
       $.ajax(
@@ -101,9 +104,32 @@ var app = new Vue({
         }
       ).done(function(data) {
         // Update currentTweet object
-        self.currentTweetText = htmlEncoding.htmlDecode(data["tweet"]);
-        self.currentTweetAuthor = data["user"];
-        console.log("Updated");
+        if (data.error) {
+          self.errorText = data.error;
+          if (data.error == "invalid names") {
+            loading = false;
+            self.tryDifferentUsersButton();
+          }
+
+          if (data.error == "tweet not found") {
+            loading = false;
+            self.unsuccsful_runs += 1;
+
+            if (self.unsuccsful_runs >= 5) {
+              alert("Too many failed attempts to find a tweet, changing users");
+              self.unsuccsful_runs = 0;
+              self.errorText = null;
+              self.tryDifferentUsersButton();
+            } else {
+              self.nextTweetButton();
+            }
+          }
+        } else {
+          self.unsuccsful_runs = 0;
+          self.errorText = null;
+          self.currentTweetText = htmlEncoding.htmlDecode(data["tweet"]);
+          self.currentTweetAuthor = data["user"];
+        }
         self.loading = false;
       });
 

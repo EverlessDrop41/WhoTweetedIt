@@ -31,9 +31,10 @@
       <!-- Tweet Display -->
       <div v-if="!loading">
         <div id="tweetDisplay" v-if="showTweetDisplay">
-          <div id="tweetWrapper">
+          <div id="tweetWrapper" v-if="errorText == null || errorText.length == 0">
             <p id="the_tweet">{{ currentTweetText }}</p>
           </div>
+          <div v-else> <p class="error">{{errorText}}</p> </div>
 
           <div class="row" id="usernameButtonRow">
             <div class="six columns">
