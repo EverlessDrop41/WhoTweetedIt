@@ -67,13 +67,21 @@ var app = new Vue({
     showTweetDisplay: false,
     currentTweetAnswered: false,
     score: 0,
-    loading: false
+    loading: false,
+    errorText: ''
   },
   methods: {
     usernameFormButton: function() {
-      this.showTweetDisplay = true;
-      this.showUsernameForm = false;
-      this.displayNextTweet();
+      if (this.username1 == '' || this.username2 == '') {
+        this.errorText = 'Usernames cannot be empty.'
+      }
+      else if (this.username1 != this.username2) {
+        this.showTweetDisplay = true;
+        this.showUsernameForm = false;
+        this.displayNextTweet();
+      } else {
+        this.errorText = "Usernames cannot be the same."
+      }
     },
     nextTweetButton: function() {
       this.resetTweetDisplay();
