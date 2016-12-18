@@ -2,8 +2,9 @@ var express = require('express')
 var app = express()
 
 var index_route = require("./routes/index");
-app.use('/', index_route);
-
+app.use('/', express.static('templates'));
+app.use('/api', index_route);
+app.use('/static', express.static('static'));
 var port = process.env.PORT || 3000;
 
 app.listen(port, function () {

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Who Tweeted It?</title>
+    <link rel="stylesheet" type="text/css" href="/static/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/static/skeleton.css">
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  </head>
+  <body>
+
+  	<h1 id="title">Who Tweeted It?</h1>
+    <div id="app" class="container">
+
+      <div id="main">
+      	<!-- Username Form -->
+      <form id="usernameForm" v-if="showUsernameForm">
+      	<div class="row"><h3 id="usernameFormTitle">Enter Names to Compare</h3></div>
+        <div class="row">
+          <div class="six columns">
+            <input v-model="username1" type="text" name="user1" id="user1" class="u-full-width" placeholder="First Username">
+          </div>
+          <div class="six columns">
+            <input v-model="username2" type="text" name="user2" id="user2" class="u-full-width" placeholder="Second Username">
+          </div>
+        </div>
+        <button type="button" class="u-full-width" v-on:click="usernameFormButton">Submit</button>
+      </form>
+
+      <!-- Tweet Display -->
+      <div id="tweetDisplay" v-if="showTweetDisplay">
+      	<div id="tweetWrapper">
+        	<p id="the_tweet">{{ currentTweetText }}</p>
+        </div>
+
+        <div class="row" id="usernameButtonRow">
+          <div class="six columns">
+            <button class="u-full-width" v-bind:username=username1 v-on:click="checkAnswer">{{ username1 }}</button>
+          </div>
+          <div class="six columns">
+            <button class="u-full-width" v-bind:username=username2 v-on:click="checkAnswer">{{ username2 }}</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="twelve columns">
+            <button class="u-full-width" id="nextTweetButton" v-on:click="nextTweetButton">Next Tweet</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="twelve columns">
+            <button class="u-full-width" id="tryDifferentUsersButton" v-on:click="tryDifferentUsersButton">Try different users</button>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
+    
+    <script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+    <script>
+      var app = new Vue({
+        el: '#app',
+        data: {
+          username1: '',
+          username2: '',
+          currentTweetText: '',
+          currentTweetAuthor: '',
+          showUsernameForm: true,
+          showTweetDisplay: false
+        },
+        methods: {
+          usernameFormButton: function() {
+            this.showTweetDisplay = true;
+            this.showUsernameForm = false;
+            this.getTweet();
+          },
+          nextTweetButton: function() {
+            this.resetTweetDisplay();
+            this.getTweet();
+          },
+          tryDifferentUsersButton: function() {
+            this.showUsernameForm = true;
+            this.showTweetDisplay = false;
+          },
+          getTweet: function() {
+            var self = this;
+            // Make AJAX request
+            $.ajax(
+            	{
+            		url: "http://127.0.0.1:3000/api/random_twitter?userA=" + self.username1 + "&userB=" + self.username2
+            	}
+            ).done(function(data) {
+            	// Update currentTweet object
+	            self.currentTweetText = data["tweet"];
+	            self.currentTweetAuthor = data["user"];
+            });
+            
+            
+          },
+          checkAnswer: function(element) {
+            // Get the username clicked
+            var buttonClicked = element.target;
+            var usernameSubmitted = buttonClicked.getAttribute("username");
+
+            // Check is user is right
+            var isRight = (usernameSubmitted === this.currentTweetAuthor);
+            
+            // Display message
+            if (isRight) {
+              this.currentTweetText = "Correct";
+            } else {
+              this.currentTweetText = "Wrong."
+            }
+
+            // Update button colours
+            this.resetTweetDisplay();
+            $("#usernameButtonRow button").addClass("incorrect");
+            console.log($('*[username="' + this.currentTweetAuthor + '"]'))
+            $('*[username="' + this.currentTweetAuthor + '"]').removeClass("incorrect").addClass("correct");
+            // $(buttonClicked).removeClass("incorrect");
+            // $(buttonClicked).addClass("correct");
+
+          },
+          resetTweetDisplay: function() {
+            $("#usernameButtonRow button").removeClass("correct");
+            $("#usernameButtonRow button").removeClass("incorrect");
+          },
+
+        }
+      })
+    </script>
+  </body>
+</html>

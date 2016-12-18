@@ -1,0 +1,52 @@
+#tweetDisplay {
+  text-align: center;
+}
+
+.hide {
+  display: none;
+}
+
+.incorrect {
+  color: #FFFFFF;
+  background: #D8414A;
+}
+
+.correct {
+  color: #FFFFFF;
+  background: #4AD841;
+}
+
+.correct:hover, .incorrect:hover, 
+.correct:active, .incorrect:active,
+.correct:focus, .incorrect:focus {
+  color: #FFF;
+  border-width: 0px !important;
+}
+
+#title {
+  background: #0099ff;
+  color: white;
+  text-align: center;
+  width: 100%;
+}
+
+#usernameFormTitle {
+  color: #888;
+  text-align: center;
+}
+
+#the_tweet {
+  font-size: 2em !important;
+  height: 3em;
+}
+
+#nextTweetButton {
+  color: #FFF;
+  background-color: #0099FF;
+  border-width: 0px !important;
+}
+
+#tryDifferentUsersButton {
+  color: #aaa;
+  border-width: 0px !important;
+}
